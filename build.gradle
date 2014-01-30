@@ -1,0 +1,37 @@
+version = '1.0-SNAPSHOT'
+group = 'org.cataractsoftware.health'
+
+
+buildscript {
+    repositories { jcenter() }
+    dependencies { classpath 'com.github.goldin.plugins.gradle:node:0.3' }
+}
+
+subprojects {
+
+
+}
+
+project(':api') {
+    apply plugin: 'node'
+}
+
+
+project(':scraper') {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    apply plugin: 'groovy'
+    dependencies {
+        compile('org.cataractsoftware.datasponge:datasponge:1.0-SNAPSHOT') {
+            exclude module: 'xml-apis'
+        }
+        compile('xml-apis:xml-apis:1.4.01')
+        compile 'org.mongodb:mongo-java-driver:2.11.3'
+        compile 'org.codehaus.groovy:groovy-all:2.2.1'
+        compile 'commons-cli:commons-cli:1.2'
+        testCompile 'org.codehaus.groovy:groovy-all:2.2.1'
+    }
+}

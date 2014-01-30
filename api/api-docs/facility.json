@@ -1,0 +1,97 @@
+{"apiVersion": "1.0.0", "swaggerVersion": "1.2", "basePath": "/healthinspections", "resourcePath": "/facility", "produces": ["application/json"], "apis": [
+    {
+        "path": "/facility/{id}",
+        "operations": [
+            {
+                "method": "GET",
+                "summary": "Find facility by ID",
+                "notes": "Returns a facility based on ID",
+                "type": "Facility",
+                "nickname": "getFacilityById",
+                "authorizations": {},
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "ID of facility to fetch",
+                        "required": true,
+                        "type": "string",
+                        "paramType": "path"
+                    }
+                ],
+                "responseMessages": [
+                    {
+                        "code": 404,
+                        "message": "Facility not found"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "path": "/facility",
+        "operations": [
+            {
+                "method": "GET",
+                "summary": "Add a new pet to the store",
+                "notes": "",
+                "type": "Facility",
+                "nickname": "listFacilities",
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "description": "Name",
+                        "required": false,
+                        "type": "string",
+                        "paramType": "query"
+                    },{
+                        "name": "page",
+                        "description": "Page",
+                        "required": false,
+                        "type": "integer",
+                        "format":"int64",
+                        "minimum":"0",
+                        "paramType": "query"
+                    }
+                ],
+                "responseMessages": [
+                    {
+                        "code": 405,
+                        "message": "Invalid input"
+                    }
+                ]
+            }
+        ]
+    }
+], "models": {
+    "Facility": {
+        "id": "Facility",
+        "required": ["_id"],
+        "properties": {
+            "_id": {
+                "type": "string",
+                "description": "Unique identifier"
+            },
+            "name": {
+                "type": "string",
+                "description": "facility name"
+            },
+            "phone": {
+                "type": "string",
+                "description": "phone number"
+            },
+            "street": {
+                "type": "string",
+                "description": "Street address"
+            },
+            "city": {
+                "type": "string",
+                "description": "city"
+            },
+            "inspections": {
+                "type": "string",
+                "description": "relative path to inspections resource"
+            }
+        }
+    }
+}}

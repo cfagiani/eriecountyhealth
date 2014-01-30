@@ -1,0 +1,20 @@
+*.class
+
+#database dir#
+datbase/
+
+#build dir#
+build/
+
+#node modules #
+node_modules/
+
+# intellij files #
+*.iml
+*.idea
+
+# Package Files #
+*.jar
+*.war
+*.ear
+.gradle/

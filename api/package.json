@@ -1,0 +1,11 @@
+{
+    "name": "healthinspections",
+    "description": "health inspection api",
+    "version": "0.0.1",
+    "author": "Christopher Fagiani",
+    "private": true,
+    "dependencies": {
+        "express": "3.x",
+        "mongodb": ">= 1.3"
+    }
+}

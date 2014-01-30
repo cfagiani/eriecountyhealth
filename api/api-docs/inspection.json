@@ -1,0 +1,131 @@
+{"apiVersion": "1.0.0", "swaggerVersion": "1.2", "basePath": "/healthinspections", "resourcePath": "/facility", "produces": ["application/json"], "apis": [
+    {
+        "path": "/facility/{id}/inspections",
+        "operations": [
+            {
+                "method": "GET",
+                "summary": "Find inspections for a facility",
+                "notes": "Returns a list of inspections for a single facility",
+                "type": "Inspection",
+                "nickname": "getInspectionByFacility",
+                "authorizations": {},
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "ID of facility for which the inspections will be fetched",
+                        "required": true,
+                        "type": "string",
+                        "paramType": "path"
+                    }
+                ],
+                "responseMessages": [
+                    {
+                        "code": 404,
+                        "message": "Facility not found"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "path": "/inspection",
+        "operations": [
+            {
+                "method": "GET",
+                "summary": "Add a new pet to the store",
+                "notes": "",
+                "type": "Inspection",
+                "nickname": "listInspections",
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "type",
+                        "description": "Inspection type",
+                        "required": false,
+                        "type": "string",
+                        "paramType": "query"
+                    },
+                    {
+                        "name": "page",
+                        "description": "Page",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": "0",
+                        "paramType": "query"
+                    }
+                ],
+                "responseMessages": [
+                    {
+                        "code": 405,
+                        "message": "Invalid input"
+                    }
+                ]
+            }
+        ]
+    }
+], "models": {
+    "Inspection": {
+        "id": "Inspection",
+        "required": ["_id", "type"],
+        "properties": {
+            "_id": {
+                "type": "string",
+                "description": "unique identifier"
+            },
+            "type": {
+                "type": "string",
+                "description": "Type of inspection (Routine, Re-inspection)",
+                "enum": [
+                    "Routine",
+                    "Re-inspection"
+                ]
+            },
+            "date": {
+                "type": "string",
+                "description": "Date of inspection"
+            },
+            "facilityId": {
+                "type": "string",
+                "description": "Unique identifier of the facility"
+            },
+            "facility": {
+                "type": "string",
+                "description": "relative path to facility resource"
+            },
+            "violations": {
+                "type": "array",
+                "description": "List of violations",
+                "items": {
+                    "type": "Violation"
+                }
+            }
+        }
+    },
+    "Violation": {
+        "id": "Violation",
+        "required": ["code"],
+        "properties": {
+            "code": {
+                "type": "string",
+                "description": "Code identifier"
+            },
+            "text": {
+                "type": "string",
+                "description": "Code description"
+            },
+            "response": {
+                "type": "string",
+                "description": "Facility response"
+            },
+            "note": {
+                "type": "string",
+                "description": "Inspector comments"
+            },
+            "repeat": {
+                "type": "boolean",
+                "description": "Flag indicating if this is a repeat violation"
+            }
+        }
+    }
+}}
