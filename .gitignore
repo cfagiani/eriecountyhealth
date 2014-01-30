@@ -1,7 +1,7 @@
 *.class
 
 #database dir#
-datbase/
+database/
 
 #build dir#
 build/
