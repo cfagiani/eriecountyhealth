@@ -10,6 +10,7 @@ This project has two components:
 * further normalize data (the website is missing things like zip codes)
 * summarize data (number of violations, etc)
 * api keys/ rate limiting
+* error handling
 
 
 
