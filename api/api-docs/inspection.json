@@ -32,7 +32,7 @@
         "operations": [
             {
                 "method": "GET",
-                "summary": "Add a new pet to the store",
+                "summary": "list/search inspections",
                 "notes": "",
                 "type": "Inspection",
                 "nickname": "listInspections",
@@ -43,6 +43,17 @@
                         "description": "Inspection type",
                         "required": false,
                         "type": "string",
+                        "paramType": "query",
+                        "enum": [
+                            "Routine",
+                            "Re-inspection"
+                        ]
+                    },
+                    {
+                        "name": "violations",
+                        "description": "Only return inspections with violations",
+                        "required": false,
+                        "type": "boolean",
                         "paramType": "query"
                     },
                     {
@@ -75,23 +86,27 @@
             },
             "type": {
                 "type": "string",
-                "description": "Type of inspection (Routine, Re-inspection)",
+                "description": "Type of inspection",
                 "enum": [
                     "Routine",
                     "Re-inspection"
-                ]
+                ],
+                "required": true
             },
             "date": {
                 "type": "string",
-                "description": "Date of inspection"
+                "description": "Date of inspection",
+                "required": true
             },
             "facilityId": {
                 "type": "string",
-                "description": "Unique identifier of the facility"
+                "description": "Unique identifier of the facility",
+                "required": true
             },
             "facility": {
                 "type": "string",
-                "description": "relative path to facility resource"
+                "description": "relative path to facility resource",
+                "required": true
             },
             "violations": {
                 "type": "array",
@@ -108,11 +123,13 @@
         "properties": {
             "code": {
                 "type": "string",
-                "description": "Code identifier"
+                "description": "Code identifier",
+                "required": true
             },
             "text": {
                 "type": "string",
-                "description": "Code description"
+                "description": "Code description",
+                "required": true
             },
             "response": {
                 "type": "string",

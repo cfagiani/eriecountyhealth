@@ -32,7 +32,7 @@
         "operations": [
             {
                 "method": "GET",
-                "summary": "Add a new pet to the store",
+                "summary": "List/search for facilities",
                 "notes": "",
                 "type": "Facility",
                 "nickname": "listFacilities",
@@ -44,13 +44,38 @@
                         "required": false,
                         "type": "string",
                         "paramType": "query"
-                    },{
+                    },
+                    {
+                        "name": "type",
+                        "description": "facility type",
+                        "required": false,
+                        "type": "string",
+                        "paramType": "query",
+                        "enum": [ "Catering",
+                            "College Food Service",
+                            "Commissary",
+                            "Day Care Center Food Service",
+                            "Mobile Food Service Establishment",
+                            "Nutrition for the Indigent",
+                            "Religious, Charitable, Fraternal Organization",
+                            "School K-12 Food Service",
+                            "State Office for the Aging Preparation Site",
+                            "State Office for the Aging Satellite Site"]
+                    },
+                    {
+                        "name": "city",
+                        "description": "City",
+                        "required": false,
+                        "type": "string",
+                        "paramType": "query"
+                    },
+                    {
                         "name": "page",
                         "description": "Page",
                         "required": false,
                         "type": "integer",
-                        "format":"int64",
-                        "minimum":"0",
+                        "format": "int64",
+                        "minimum": "0",
                         "paramType": "query"
                     }
                 ],
@@ -71,10 +96,28 @@
             "_id": {
                 "type": "string",
                 "description": "Unique identifier"
+
             },
             "name": {
                 "type": "string",
-                "description": "facility name"
+                "description": "facility name",
+                "required": true
+            },
+            "type": {
+                "type": "string",
+                "description": "facility type",
+                "enum": [
+                    "Catering",
+                    "College Food Service",
+                    "Commissary",
+                    "Day Care Center Food Service",
+                    "Mobile Food Service Establishment",
+                    "Nutrition for the Indigent",
+                    "Religious, Charitable, Fraternal Organization",
+                    "School K-12 Food Service",
+                    "State Office for the Aging Preparation Site",
+                    "State Office for the Aging Satellite Site"],
+                "required": true
             },
             "phone": {
                 "type": "string",
@@ -82,11 +125,13 @@
             },
             "street": {
                 "type": "string",
-                "description": "Street address"
+                "description": "Street address",
+                "required": true
             },
             "city": {
                 "type": "string",
-                "description": "city"
+                "description": "city",
+                "required": true
             },
             "inspections": {
                 "type": "string",

@@ -1,4 +1,3 @@
-
 app.get('/healthinspections/facility', function (req, res) {
     var page = 0
     if (req.query["page"] != undefined) {
@@ -6,27 +5,29 @@ app.get('/healthinspections/facility', function (req, res) {
     }
 
     var options = {"limit": pageLimit, "skip": page * pageLimit, "sort": "name"};
-    if (req.query["name"] == undefined) {
-        db.collection('facility', function (err, collection) {
-
-            collection.find({}, options).toArray(function (err, items) {
-                items.forEach(function (item) {
-                    item.inspections = '/healthinspections/facility/' + item._id + '/inspections';
-                });
-                res.send(items);
-            });
-        });
-    } else {
-        db.collection('facility', function (err, collection) {
-            //TODO: SANITIZE QUERY STRING
-            collection.find({name: new RegExp(req.query["name"])}, options).toArray(function (err, items) {
-                items.forEach(function (item) {
-                    item.inspections = '/healthinspections/facility/' + item._id + '/inspections';
-                });
-                res.send(items);
-            });
-        });
+    var queryObj = {}
+    //TODO: SANITIZE QUERY STRING
+    if (req.query["name"] != undefined) {
+        queryObj.name = new RegExp(req.query["name"]);
     }
+    if (req.query["city"] != undefined) {
+        queryObj.city = new RegExp(req.query["city"]);
+    }
+    if (req.query["type"] != undefined) {
+        queryObj.type = req.query["type"];
+    }
+
+
+    db.collection('facility', function (err, collection) {
+
+        collection.find(queryObj, options).toArray(function (err, items) {
+            items.forEach(function (item) {
+                item.inspections = '/healthinspections/facility/' + item._id + '/inspections';
+            });
+            res.send(items);
+        });
+    });
+
 });
 
 app.get('/healthinspections/facility/:id', function (req, res) {

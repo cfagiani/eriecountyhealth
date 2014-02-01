@@ -4,28 +4,27 @@ app.get('/healthinspections/facility/:id/inspections', function (req, res) {
         page = parseInt(req.query["page"]);
     }
 
-    var options = {"limit": pageLimit, "skip": page * pageLimit, "sort": "name"};
-    if (req.query["type"] == undefined) {
-        db.collection('inspection', function (err, collection) {
-
-            collection.find({facilityId: req.params.id}, options).toArray(function (err, items) {
-                items.forEach(function (item) {
-                    item.facility = '/healthinspections/facility/' + item.facilityId;
-                });
-                res.send(items);
-            });
-        });
-    } else {
-        db.collection('inspection', function (err, collection) {
-            //TODO: SANITIZE QUERY STRING
-            collection.find({facilityId: req.params.id, type: new RegExp(req.query["type"])}, options).toArray(function (err, items) {
-                items.forEach(function (item) {
-                    item.facility = '/healthinspections/facility/' + item.facilityId;
-                });
-                res.send(items);
-            });
-        });
+    var queryObj = {facilityId: req.params.id}
+    //TODO: SANITIZE QUERY STRING
+    if (req.query["type"] != undefined) {
+        queryObj.type = req.query["type"];
     }
+
+    if (req.query["violations"] != undefined) {
+        queryObj.violations = {$not: {$size: 0}}
+    }
+
+    var options = {"limit": pageLimit, "skip": page * pageLimit, "sort": "name"};
+
+    db.collection('inspection', function (err, collection) {
+        collection.find(queryObj, options).toArray(function (err, items) {
+            items.forEach(function (item) {
+                item.facility = '/healthinspections/facility/' + item.facilityId;
+            });
+            res.send(items);
+        });
+    });
+
 });
 
 app.get('/healthinspections/inspection', function (req, res) {
@@ -34,28 +33,26 @@ app.get('/healthinspections/inspection', function (req, res) {
         page = parseInt(req.query["page"]);
     }
 
-    var options = {"limit": pageLimit, "skip": page * pageLimit, "sort": "name"};
-    if (req.query["type"] == undefined) {
-        db.collection('inspection', function (err, collection) {
 
-            collection.find({}, options).toArray(function (err, items) {
-                items.forEach(function (item) {
-                    item.facility = '/healthinspections/facility/' + item.facilityId;
-                });
-                res.send(items);
-            });
-        });
-    } else {
-        db.collection('inspection', function (err, collection) {
-            //TODO: SANITIZE QUERY STRING
-            collection.find({type: new RegExp(req.query["type"])}, options).toArray(function (err, items) {
-                items.forEach(function (item) {
-                    item.facility = '/healthinspections/facility/' + item.facilityId;
-                });
-                res.send(items);
-            });
-        });
+    var options = {"limit": pageLimit, "skip": page * pageLimit, "sort": "name"};
+
+    var queryObj = {}
+    if (req.query["type"] != undefined) {
+        queryObj.type = req.query["type"];
     }
+    if (req.query["violations"] != undefined && req.query["violations"] == "true") {
+        queryObj.violations = {$not: {$size: 0}}
+    }
+
+    db.collection('inspection', function (err, collection) {
+
+        collection.find(queryObj, options).toArray(function (err, items) {
+            items.forEach(function (item) {
+                item.facility = '/healthinspections/facility/' + item.facilityId;
+            });
+            res.send(items);
+        });
+    });
 });
 
 app.get('/healthinspections/inspection/:id', function (req, res) {
