@@ -7,7 +7,6 @@ This project has two components:
 
 ###TODO
 * augment data in facilities database with geo coordinates to allow geospatial searches
-* further normalize data (the website is missing things like zip codes)
 * summarize data (number of violations, etc)
 * api keys/ rate limiting
 * error handling

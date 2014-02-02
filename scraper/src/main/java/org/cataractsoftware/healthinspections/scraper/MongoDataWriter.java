@@ -83,6 +83,17 @@ public class MongoDataWriter extends AbstractDataWriter {
                     obj.append("violations", dbList);
                 }
 
+            } else if ("inspections".equalsIgnoreCase(entry.getKey())) {
+                if (entry.getValue() != null) {
+                    BasicDBList dbList = new BasicDBList();
+                    for (InspectionRecord insp : (List<InspectionRecord>) entry.getValue()) {
+                        dbList.add(new BasicDBObject("id", insp.getId()).append("type", insp.getType()).
+                                append("date", insp.getDate()).append("critical-violations", insp.getCriticalViolations()).
+                                append("non-critical-violations", insp.getNonCriticalViolations()));
+                    }
+                    obj.append("inspections", dbList);
+                }
+
             } else if (!idFieldName.equals(entry.getKey()) && entry.getValue() instanceof String) {
                 obj.append(entry.getKey(), entry.getValue());
             }

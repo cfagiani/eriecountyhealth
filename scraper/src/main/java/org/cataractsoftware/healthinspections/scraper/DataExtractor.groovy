@@ -1,10 +1,20 @@
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import org.cataractsoftware.datasponge.DataRecord
+import org.cataractsoftware.healthinspections.scraper.InspectionRecord
 import org.cataractsoftware.healthinspections.scraper.ViolationRecord
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 
 class DataExtractor {
 
     private static final String CATEGORY_PARAM = "RestrictToCategory=";
+    private static final DateFormat DATE_FMT = new SimpleDateFormat("dd-MMMMM-yyyy");
+    private static final DateFormat SHORT_DATE_FMT = new SimpleDateFormat("dd-MMM-yyyy");
+    private static
+    final Logger logger = LoggerFactory.getLogger(org.cataractsoftware.datasponge.extractor.DataExtractor.class);
 
 
     def extractData(url, page) {
@@ -24,7 +34,14 @@ class DataExtractor {
         record.setField("inspectionId", extractIdFromUrl(url))
         record.setField("facilityId", extractIdFromUrl(page.getByXPath("//a[contains(@href,'FacilityHistory')]").get(0).getAttribute("href")))
         record.setField("type", page.getByXPath("//tr//*[contains(.,'Inspection type')]").get(0).getNextSibling()?.getFirstChild().getTextContent()?.trim());
-        record.setField("date", page.getByXPath("//tr//*[contains(.,'Inspection date')]").get(0).getNextSibling()?.getFirstChild().getTextContent()?.trim());
+        def dateString = page.getByXPath("//tr//*[contains(.,'Inspection date')]").get(0).getNextSibling()?.getFirstChild().getTextContent()?.trim();
+        if (dateString != null) {
+            try {
+                record.setField("date", DATE_FMT.parse(dateString));
+            } catch (Exception e) {
+                logger.warn("Could not parse date", e);
+            }
+        }
 
         def violations = page.getByXPath("//table[@cellspacing='3']//tr")
         if (violations != null) {
@@ -35,18 +52,17 @@ class DataExtractor {
                 if (fullText != null) {
                     String code = ""
                     String desc = ""
-                    String note = null
                     String response = null
-                    boolean repeat = false;
+
                     if (fullText.contains("/")) {
                         code = fullText.substring(0, fullText.indexOf("/")).trim()
                         desc = fullText.substring(fullText.indexOf("/") + 1).trim()
                     }
                     String repeatFlag = v.getFirstChild()?.getFirstChild()?.getNextSibling()?.getNextSibling()?.getTextContent()?.trim()
-                    repeat = repeatFlag.equalsIgnoreCase("repeat")
+                    boolean repeat = repeatFlag.equalsIgnoreCase("repeat")
 
 
-                    note = v.getFirstChild()?.getFirstChild()?.getNextSibling()?.getNextSibling()?.getNextSibling()?.getTextContent()?.trim();
+                    String note = v.getFirstChild()?.getFirstChild()?.getNextSibling()?.getNextSibling()?.getNextSibling()?.getTextContent()?.trim();
                     if (note != null) {
                         response = v.getFirstChild().getFirstChild().getNextSibling().getNextSibling().getNextSibling()?.getNextSibling()?.getNextSibling()?.getTextContent()?.trim();
                     }
@@ -76,11 +92,48 @@ class DataExtractor {
                 } else {
                     record.setField("street", addressString.trim())
                 }
+                def mapLink = page.getByXPath("//a[contains(@href,'maps.google')]").get(0).getAttribute("href")
+                if (mapLink != null) {
+                    record.setField("zip", mapLink.substring(mapLink.length() - 5))
+                }
             }
 
         }
         record.setField("type", page.getByXPath("//tr//*[contains(.,'Facility Type')]")?.get(0).getNextSibling()?.getFirstChild().getTextContent()?.trim());
         record.setField("phone", page.getByXPath("//tr//*[contains(.,'Phone')]")?.get(0).getNextSibling()?.getFirstChild().getTextContent()?.trim());
+
+        def inspectionList = page.getByXPath("//tr//*[contains(.,'critical')]")
+        if (inspectionList != null) {
+            def inspectionRecords = []
+            for (int i = 0; i < inspectionList.size(); i++) {
+                InspectionRecord rec = new InspectionRecord();
+                rec.setId(extractIdFromUrl(inspectionList.get(i).getPreviousSibling().getPreviousSibling().getFirstChild().getNextSibling().getAttribute('href')))
+                rec.setType(inspectionList.get(i).getPreviousSibling().getPreviousSibling().getTextContent()?.trim())
+                try {
+                    rec.setDate(SHORT_DATE_FMT.parse(inspectionList.get(i).getPreviousSibling().getTextContent().replaceAll("\\u00A0", "").trim()))
+                } catch (Exception e) {
+                    try {
+                        rec.setDate(DATE_FMT.parse(inspectionList.get(i).getPreviousSibling().getTextContent().replaceAll("\\u00A0", "").trim()))
+                    } catch (Exception e2) {
+                        logger.warn("Could not parse inspection date", e2)
+                    }
+                }
+                def violationString = inspectionList.get(i).getTextContent()
+                if (violationString != null) {
+                    String[] violationParts = violationString.replaceAll("\\u00A0", "").trim().split("&")
+                    for (String part in violationParts) {
+                        if (part.contains("non-critical")) {
+                            rec.setNonCriticalViolations(Integer.parseInt(part.replace("non-critical", "").trim()));
+                        } else {
+                            rec.setCriticalViolations(Integer.parseInt(part.replace("critical", "").trim()));
+                        }
+                    }
+
+                }
+                inspectionRecords.add(rec);
+            }
+            record.setField("inspections", inspectionRecords);
+        }
 
         return record
     }
