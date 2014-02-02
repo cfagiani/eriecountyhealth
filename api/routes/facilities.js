@@ -22,7 +22,7 @@ app.get('/healthinspections/facility', function (req, res) {
 
         collection.find(queryObj, options).toArray(function (err, items) {
             items.forEach(function (item) {
-                item.inspections = '/healthinspections/facility/' + item._id + '/inspections';
+                item.inspectionsLink = '/healthinspections/facility/' + item._id + '/inspections';
             });
             res.send(items);
         });
@@ -34,7 +34,7 @@ app.get('/healthinspections/facility/:id', function (req, res) {
     var id = req.params.id;
     db.collection('facility', function (err, collection) {
         collection.findOne({'_id': id}, function (err, item) {
-            item.inspections = '/healthinspections/facility/' + item._id + '/inspections';
+            item.inspectionsLink = '/healthinspections/facility/' + item._id + '/inspections';
             res.send(item);
         });
     });

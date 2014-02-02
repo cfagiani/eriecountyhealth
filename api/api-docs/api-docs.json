@@ -1,11 +1,11 @@
 {"apiVersion": "1.0.0", "swaggerVersion": "1.2", "apis": [
     {
         "path": "/facility",
-        "description": "Operations about facilities"
+        "description": "Search/find food service facilities"
     },
     {
         "path": "/inspection",
-        "description": "Operations about inspections"
+        "description": "Get details about facility inspections"
     }
 ], "authorizations": {
 }, "info": {

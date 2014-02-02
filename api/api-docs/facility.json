@@ -133,9 +133,50 @@
                 "description": "city",
                 "required": true
             },
-            "inspections": {
+            "inspectionsLink": {
                 "type": "string",
-                "description": "relative path to inspections resource"
+                "description": "relative path to inspections resource showing all inspections for this facility"
+            },
+            "inspections": {
+                "type": "array",
+                "description": "List of inspections for this facility",
+                "items": {
+                    "type": "InspectionSummary"
+                }
+            }
+        }
+    },
+    "InspectionSummary": {
+        "id": "InspectionSummary",
+        "required": ["id,type"],
+        "properties": {
+            "id": {
+                "type": "string",
+                "description": "identifier",
+                "required": true
+            },
+            "type": {
+                "type": "string",
+                "description": "Inspection type",
+                "required": true,
+                "enum": [
+                    "Routine",
+                    "Re-inspection"
+                ]
+            },
+            "date": {
+                "type": "date",
+                "description": "Inspection Date"
+            },
+            "critical-violations": {
+                "type": "integer",
+                "format": "int64",
+                "description": "Number of critical violations for this inspection"
+            },
+            "non-critical-violations": {
+                "type": "integer",
+                "format": "int64",
+                "description": "Number of non-critical violations for this inspection"
             }
         }
     }
