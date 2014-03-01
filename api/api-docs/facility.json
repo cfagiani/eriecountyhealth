@@ -68,6 +68,14 @@
                         "required": false,
                         "type": "string",
                         "paramType": "query"
+                    },    {
+                        "name": "sort",
+                        "description": "sort order",
+                        "required": false,
+                        "type": "string",
+                        "paramType": "query",
+                        "enum": [ "name",
+                            "current-violations"]
                     },
                     {
                         "name": "page",

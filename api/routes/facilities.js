@@ -16,6 +16,15 @@ app.get('/healthinspections/facility', function (req, res) {
     if (req.query["type"] != undefined) {
         queryObj.type = req.query["type"];
     }
+    if(req.query["sort"] != undefined){
+        if(req.query["sort"] == "current-violations"){
+            options.sort = {'inspections.0.critical-violations' : -1, 'inspections.0.non-critical-violations':-1}
+        }else if (req.query["sort"] == "total-violations"){
+            //TODO: build query using aggregation framework
+        }
+
+    }
+
 
 
     db.collection('facility', function (err, collection) {

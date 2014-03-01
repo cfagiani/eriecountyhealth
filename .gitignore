@@ -17,4 +17,5 @@ node_modules/
 *.jar
 *.war
 *.ear
+*.tar
 .gradle/
