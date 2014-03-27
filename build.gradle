@@ -28,7 +28,8 @@ project(':scraper') {
         compile('org.cataractsoftware.datasponge:datasponge:1.0-SNAPSHOT') {
             exclude module: 'xml-apis'
         }
-        compile('xml-apis:xml-apis:1.4.01')
+        compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
+        compile 'xml-apis:xml-apis:1.4.01'
         compile 'org.mongodb:mongo-java-driver:2.11.3'
         compile 'org.codehaus.groovy:groovy-all:2.2.1'
         compile 'commons-cli:commons-cli:1.2'

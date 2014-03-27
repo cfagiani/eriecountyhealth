@@ -13,8 +13,7 @@ class DataExtractor {
     private static final String CATEGORY_PARAM = "RestrictToCategory=";
     private static final DateFormat DATE_FMT = new SimpleDateFormat("dd-MMMMM-yyyy");
     private static final DateFormat SHORT_DATE_FMT = new SimpleDateFormat("dd-MMM-yyyy");
-    private static
-    final Logger logger = LoggerFactory.getLogger(org.cataractsoftware.datasponge.extractor.DataExtractor.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataExtractor.class);
 
 
     def extractData(url, page) {
@@ -35,7 +34,7 @@ class DataExtractor {
         record.setField("facilityId", extractIdFromUrl(page.getByXPath("//a[contains(@href,'FacilityHistory')]").get(0).getAttribute("href")))
         record.setField("type", page.getByXPath("//tr//*[contains(.,'Inspection type')]").get(0).getNextSibling()?.getFirstChild().getTextContent()?.trim());
         def dateString = page.getByXPath("//tr//*[contains(.,'Inspection date')]").get(0).getNextSibling()?.getFirstChild().getTextContent()?.trim();
-        if (dateString != null) {
+        if (dateString != null && dateString.trim().length()>0) {
             try {
                 record.setField("date", DATE_FMT.parse(dateString));
             } catch (Exception e) {
