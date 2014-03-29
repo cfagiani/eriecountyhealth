@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Erie County Food Facility Health Inspections</title>
+
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="container">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Erie County Food Facility Inspections</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="index.html">Map</a></li>
+                    <li><a href="apis.html">API & Docs</a></li>
+                    <li class="active"><a href="#">About</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+        <!--/.container-fluid -->
+    </div>
+
+    <div class="jumbotron">
+        <h1>Erie County Food Facility Inspections</h1>
+        <p class="lead">This site is a demonstration of one use of government data when it is opened up for public use. Find this project and others at <a href="http://www.buffaloopendata.com">Buffalo Open Data.</a></p>
+    </div>
+
+    <div class="row marketing">
+        <div class="col-lg-6">
+            <h4>What is Open Data?</h4>
+            <p>There are many definitions of "Open Data" but, at a minimum, it can be thought of as data that can be freely used, reused and redistributed by anyone.</p>
+
+            <h4>Where did this data come from?</h4>
+            <p>The inspection data on this site was obtained from the Erie County (NY) <a href="http://www.healthspace.com/erieny">health inspection database</a>. The data was then augmented with geocodes (latidudes/longitudes) by interpolating the coordinates from <a href="http://www.census.gov/geo/maps-data/data/tiger-line.html">US Census GIS</a> files.
+                The address interpolation is not 100% accurate so there may be some points that appear in the wrong place on the map.</p>
+
+            <h4>What is the point of this site?</h4>
+            <p>This site serves as just one example of what can be done when data is made accessible to the general public. The more data sets that are made available, the richer the applications can become as data is "mashed-up" in novel ways. These uses can run the gamut from simple mobile/web apps to in-depth analysis.</p>
+        </div>
+
+        <div class="col-lg-6">
+            <h4>What powers the map?</h4>
+            <p>The map on this site uses the <a href="http://openlayers.org/">OpenLayers</a> library for display and the data comes from a custom developed <a href="apis.html">API</a></p>
+
+            <h4>Where is the source code?</h4>
+            <p>This site and the tools used to create it are Open Source and the source code can be found on <a href="https://github.com/cfagiani/eriecountyhealth">GitHub</a>.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2014</p>
+    </div>
+
+</div> <!-- /container -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>
