@@ -3,20 +3,47 @@
 <head>
     <title>Erie County Food Facility Health Inspections</title>
     <link href='/css/map.css' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
     <script src="/js/map.js"></script>
-    <script>
-        $(function () {
-            initMap();
-            fetchPoints();
-        });
-    </script>
-
 </head>
 <body>
-<p>Health Inspections</p>
-<a href="apis.html">Click here for APIs</a>
-<div id="mapdiv"></div>
+<div class="container">
+    <!--navbar -->
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Erie County Food Facility Inspections</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="apis.html">API & Docs</a></li>
+                    <li><a href="http://www.buffaloopendata.com">Buffalo Open Data</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+        <!--/.container-fluid -->
+    </div>
+
+    <div id="mapdiv"></div>
+</div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script>
+    $(function () {
+        initMap();
+        fetchPoints();
+    });
+</script>
+
 </body>
 </html>
