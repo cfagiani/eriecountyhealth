@@ -18,17 +18,13 @@ function initMap() {
 
 
     var lonlat = new OpenLayers.LonLat(-78.865002, 42.901206).transform(epsg4326, projectTo);
-
     var zoom = 15;
-
 
     markers = new OpenLayers.Layer.Vector("Overlay");
 
     controls = {
         selector: new OpenLayers.Control.SelectFeature(markers, { onSelect: createPopup, onUnselect: destroyPopup })
     };
-
-
     map.addControl(controls['selector']);
     controls['selector'].activate();
 
@@ -103,7 +99,7 @@ function displayDetails(item) {
             var date = new Date(value.date);
             content+=value.type+' ('+date.toDateString()+')</a></h4></div>';
             content+=     ' <div id="collapse'+index+'" class="panel-collapse collapse"><div class="panel-body" id="'+value.id+'">';
-            //todo content here
+            //content inserted here after api call
             content+='</div></div></div>';
         });
         content += '</div>';

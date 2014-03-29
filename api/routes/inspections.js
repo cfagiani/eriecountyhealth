@@ -55,6 +55,22 @@ app.get('/healthinspections/inspection', function (req, res) {
     });
 });
 
+app.get('/healthinspections/inspection/stats', function(req,res){
+    db.collection('inspection', function (err, collection) {
+        collection.aggregate([{$unwind: "$violations"},{$group:{_id: {$concat:["$violations.text"," CODE:","$violations.code"]},count:{$sum:1}}}],function (err, items) {
+            items.forEach(function (item) {
+                var parts = item._id.split(" CODE:");
+                item._id = undefined;
+                item.text = parts[0];
+                item.code = parts[1];
+            });
+            //sort descending
+            res.send(items.sort(function(a,b){return b.count - a.count}));
+        });
+    });
+});
+
+
 app.get('/healthinspections/inspection/:id', function (req, res) {
     var id = req.params.id;
     db.collection('inspection', function (err, collection) {
@@ -64,3 +80,5 @@ app.get('/healthinspections/inspection/:id', function (req, res) {
         });
     });
 });
+
+
