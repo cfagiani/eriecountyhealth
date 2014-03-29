@@ -96,12 +96,14 @@ public class MongoDataWriter extends AbstractDataWriter {
 
             } else if ("loc".equalsIgnoreCase(entry.getKey()) && entry.getValue() != null) {
                 GeoPoint point = (GeoPoint) entry.getValue();
-                BasicDBObject geoObj = new BasicDBObject("type", point.getType());
-                BasicDBList coordList = new BasicDBList();
-                coordList.add(point.getLon());
-                coordList.add(point.getLat());
-                geoObj.append("coordinates", coordList);
-                obj.append("loc", geoObj);
+                if (point.getLat() != null && point.getLon() != null) {
+                    BasicDBObject geoObj = new BasicDBObject("type", point.getType());
+                    BasicDBList coordList = new BasicDBList();
+                    coordList.add(point.getLon());
+                    coordList.add(point.getLat());
+                    geoObj.append("coordinates", coordList);
+                    obj.append("loc", geoObj);
+                }
             } else if (!idFieldName.equals(entry.getKey()) && entry.getValue() instanceof String) {
                 obj.append(entry.getKey(), entry.getValue());
             }

@@ -1,0 +1,8 @@
+#mapdiv {
+    width: 500px;
+    height: 500px;
+}
+
+div.olControlAttribution {
+    bottom: 3px;
+}

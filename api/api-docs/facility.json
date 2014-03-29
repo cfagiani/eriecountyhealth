@@ -85,6 +85,34 @@
                         "format": "int64",
                         "minimum": "0",
                         "paramType": "query"
+                    },
+                    {
+                        "name": "trx",
+                        "description": "top right x coordinate of bounding box",
+                        "required": false,
+                        "type": "float",
+                        "paramType": "query"
+                    },
+                    {
+                        "name": "try",
+                        "description": "top right y coordinate of bounding box",
+                        "required": false,
+                        "type": "float",
+                        "paramType": "query"
+                    },
+                    {
+                        "name": "blx",
+                        "description": "bottom left x coordinate of bounding box",
+                        "required": false,
+                        "type": "float",
+                        "paramType": "query"
+                    },
+                    {
+                        "name": "bly",
+                        "description": "bottom left y coordinate of bounding box",
+                        "required": false,
+                        "type": "float",
+                        "paramType": "query"
                     }
                 ],
                 "responseMessages": [
@@ -150,6 +178,29 @@
                 "description": "List of inspections for this facility",
                 "items": {
                     "type": "InspectionSummary"
+                }
+            },
+            "loc":{
+                "type": "GeoPoint",
+                "description": "Lat/lon for facility",
+                "required":false
+            }
+        }
+    },
+    "GeoPoint":{
+      "id":"GeoPoint",
+        "required":["type"],
+        "properties":{
+            "type":{
+                "type":"string",
+                "description":"type of geo feature",
+                "required":true
+            },
+            "coordinates":{
+                "type":"array",
+                "description":"point coordinates in lon/lat order",
+                "items":{
+                    "type":"double"
                 }
             }
         }
