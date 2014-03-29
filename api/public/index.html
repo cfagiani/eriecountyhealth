@@ -37,27 +37,37 @@
             <div id="mapdiv"></div>
         </div>
         <div class="col-md-4">
-            <div id="summarydiv">
-                <h3>Current View Summary</h3>
-                <table>
-                    <tr>
-                        <td><b>Most Critical Violations:</b></td>
-                        <td id="mostcritical"></td>
-                    </tr>
-                    <tr>
-                        <td><b>Average Number of Critical Violations:</b></td>
-                        <td id="avgcritviolations"></td>
-                    </tr>
-                    <tr>
-                        <td><b>Most Non-Critical Violations:</b></td>
-                        <td id="mostnoncritical"></td>
-                    </tr>
-                    <tr>
-                        <td><b>Average Number of Non-Critical Violations:</b></td>
-                        <td id="avgnoncritviolations"></td>
-                    </tr>
-                </table>
+
+            <div class="row">
+                <div id="detailsdiv">
+                    <div id="addressdiv"></div>
+                    <div id="inspectiondiv"></div>
+                </div>
             </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div id="summarydiv">
+            <h3>Current View Summary</h3>
+            <table>
+                <tr>
+                    <td><b>Most Critical Violations:</b></td>
+                    <td id="mostcritical"></td>
+                </tr>
+                <tr>
+                    <td><b>Average Number of Critical Violations:</b></td>
+                    <td id="avgcritviolations"></td>
+                </tr>
+                <tr>
+                    <td><b>Most Non-Critical Violations:</b></td>
+                    <td id="mostnoncritical"></td>
+                </tr>
+                <tr>
+                    <td><b>Average Number of Non-Critical Violations:</b></td>
+                    <td id="avgnoncritviolations"></td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>
@@ -67,6 +77,7 @@
     $(function () {
         initMap();
         fetchPoints();
+        $('#detailsdiv').hide();
     });
 </script>
 

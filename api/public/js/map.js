@@ -76,7 +76,61 @@ function buildPopupContent(item) {
         content += "Last inspected on:" + date.toDateString() + "<br>";
         content += item.inspections.length + " total inspection records";
     }
+    displayDetails(item);
     return content;
+
+}
+
+/**
+ * populates the details div with the inspection info
+ * @param item
+ */
+function displayDetails(item) {
+
+    $("#addressdiv").empty();
+    $("#addressdiv").html("<h3>" + item.name + "</h3>" + item.street + " " + item.city + ", NY " + item.zip + "<br>" + item.phone);
+    $("#inspectiondiv").empty();
+    if (item.inspections !== undefined && item.inspections.length > 0) {
+        var content = '<div class="panel-group" id="accordion">';
+        $.each(item.inspections, function (index, value) {
+            var color = "#49F043";
+            if(value["critical-violations"]>0){
+                color = "#f04d49";
+            }else if (value["non-critical-violations"]>0){
+                color = "#EEF015";
+            }
+            content+='<div class="panel panel-default"><div class="panel-heading" style="background-color:'+color+'"><h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse'+index+'">';
+            var date = new Date(value.date);
+            content+=value.type+' ('+date.toDateString()+')</a></h4></div>';
+            content+=     ' <div id="collapse'+index+'" class="panel-collapse collapse"><div class="panel-body" id="'+value.id+'">';
+            //todo content here
+            content+='</div></div></div>';
+        });
+        content += '</div>';
+        $('#inspectiondiv').append(content);
+        $('#accordion').on('show.bs.collapse', function (evt) {
+            var contentDiv = $(evt.target.children[0]);
+
+            $.get("/healthinspections/inspection/"+contentDiv[0].id, function(data){
+                if(data.violations !== undefined && data.violations.length>0){
+                    var inspContent = "";
+                    $.each(data.violations, function(index ,value){
+                        inspContent+="<p><b>"+value.code+"-"+value.text+"</b><br>";
+                        inspContent+=value.note+"</p>";
+                    });
+                    contentDiv.html(inspContent);
+
+                }else{
+                    contentDiv.html("No Violations");
+                }
+            });
+        })
+    } else {
+        $("#inspectiondiv").html("<h4>No Inspections</h4>");
+    }
+
+    $("#detailsdiv").show();
+
 
 }
 
@@ -92,11 +146,11 @@ function destroyPopup(feature) {
 /**
  * updates the summary statistics based on the data passed in
  */
-function updateSummaryContent(mostCritViolated,mostNonCritViolated,totalCritViolations, totalNonCritViolations,totalItems){
-    $("#mostcritical").html(mostCritViolated.name+" ("+mostCritViolated.inspections[0]["critical-violations"]+")");
-    $("#mostnoncritical").html(mostNonCritViolated.name+" ("+mostNonCritViolated.inspections[0]["non-critical-violations"]+")");
-    $("#avgcritviolations").html((totalCritViolations/totalItems).toFixed(2));
-    $("#avgnoncritviolations").html((totalNonCritViolations/totalItems).toFixed(2));
+function updateSummaryContent(mostCritViolated, mostNonCritViolated, totalCritViolations, totalNonCritViolations, totalItems) {
+    $("#mostcritical").html(mostCritViolated.name + " (" + mostCritViolated.inspections[0]["critical-violations"] + ")");
+    $("#mostnoncritical").html(mostNonCritViolated.name + " (" + mostNonCritViolated.inspections[0]["non-critical-violations"] + ")");
+    $("#avgcritviolations").html((totalCritViolations / totalItems).toFixed(2));
+    $("#avgnoncritviolations").html((totalNonCritViolations / totalItems).toFixed(2));
 
 }
 
@@ -115,7 +169,7 @@ function fetchPoints() {
         markers.removeAllFeatures();
         var mostCritViolated = null;
         var mostNonCritViolated = null;
-        var totalCritViolations =0;
+        var totalCritViolations = 0;
         var totalNonCritViolations = 0;
         $.each(data, function (index, value) {
             if (value.loc !== undefined) {
@@ -124,16 +178,16 @@ function fetchPoints() {
                 if (value.inspections !== undefined && value.inspections.length > 0) {
                     if (value.inspections[0]["critical-violations"] > 0) {
                         color = "red";
-                        if(mostCritViolated == null || mostCritViolated.inspections[0]["critical-violations"] < value.inspections[0]["critical-violations"]){
+                        if (mostCritViolated == null || mostCritViolated.inspections[0]["critical-violations"] < value.inspections[0]["critical-violations"]) {
                             mostCritViolated = value;
                         }
-                        totalCritViolations +=value.inspections[0]["critical-violations"];
+                        totalCritViolations += value.inspections[0]["critical-violations"];
                     } else if (value.inspections[0]["non-critical-violations"] > 0) {
                         color = "yellow";
-                        if(mostNonCritViolated == null || mostNonCritViolated.inspections[0]["non-critical-violations"] < value.inspections[0]["non-critical-violations"]){
+                        if (mostNonCritViolated == null || mostNonCritViolated.inspections[0]["non-critical-violations"] < value.inspections[0]["non-critical-violations"]) {
                             mostNonCritViolated = value;
                         }
-                        totalNonCritViolations +=value.inspections[0]["non-critical-violations"];
+                        totalNonCritViolations += value.inspections[0]["non-critical-violations"];
                     }
                 }
                 var marker = new OpenLayers.Feature.Vector(
@@ -146,6 +200,6 @@ function fetchPoints() {
             }
 
         });
-        updateSummaryContent(mostCritViolated,mostNonCritViolated,totalCritViolations, totalNonCritViolations, data.length);
+        updateSummaryContent(mostCritViolated, mostNonCritViolated, totalCritViolations, totalNonCritViolations, data.length);
     });
 }
