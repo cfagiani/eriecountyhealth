@@ -7,7 +7,7 @@ var projectTo = new OpenLayers.Projection("EPSG:900913"); //The map projection (
 var controls = null;
 
 
-function init() {
+function initMap() {
     map = new OpenLayers.Map("mapdiv");
     var mapnik = new OpenLayers.Layer.OSM();
     map.addLayer(mapnik);
