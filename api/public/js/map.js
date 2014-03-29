@@ -95,8 +95,8 @@ function destroyPopup(feature) {
 function updateSummaryContent(mostCritViolated,mostNonCritViolated,totalCritViolations, totalNonCritViolations,totalItems){
     $("#mostcritical").html(mostCritViolated.name+" ("+mostCritViolated.inspections[0]["critical-violations"]+")");
     $("#mostnoncritical").html(mostNonCritViolated.name+" ("+mostNonCritViolated.inspections[0]["non-critical-violations"]+")");
-    $("#avgcritviolations").html(totalCritViolations/totalItems);
-    $("#avgnoncritviolations").html(totalNonCritViolations/totalItems);
+    $("#avgcritviolations").html((totalCritViolations/totalItems).toFixed(2));
+    $("#avgnoncritviolations").html((totalNonCritViolations/totalItems).toFixed(2));
 
 }
 

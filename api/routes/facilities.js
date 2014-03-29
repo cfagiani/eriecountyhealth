@@ -24,6 +24,7 @@ app.get('/healthinspections/facility', function (req, res) {
         }
     }
     if(req.query["blx"] !==undefined  && req.query["bly"] !==undefined && req.query["trx"] !==undefined  && req.query["try"] !==undefined){
+        options = {};
         queryObj.loc = {$geoWithin: {$box :[[parseFloat(req.query["blx"]),parseFloat(req.query["bly"]) ],[parseFloat(req.query["trx"]),parseFloat(req.query["try"]) ]] }}
     }
 
