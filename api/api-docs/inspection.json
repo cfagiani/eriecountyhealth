@@ -1,5 +1,33 @@
 {"apiVersion": "1.0.0", "swaggerVersion": "1.2", "basePath": "/healthinspections", "resourcePath": "/facility", "produces": ["application/json"], "apis": [
     {
+        "path": "/inspection/{id}",
+        "operations": [
+            {
+                "method": "GET",
+                "summary": "Find inspection by ID",
+                "notes": "Returns a inspection based on ID",
+                "type": "Inspection",
+                "nickname": "getInspectionById",
+                "authorizations": {},
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "ID of inspection to fetch",
+                        "required": true,
+                        "type": "string",
+                        "paramType": "path"
+                    }
+                ],
+                "responseMessages": [
+                    {
+                        "code": 404,
+                        "message": "Inspection not found"
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "path": "/facility/{id}/inspections",
         "operations": [
             {
@@ -74,6 +102,37 @@
                 ]
             }
         ]
+    },{
+        "path": "/inspection/stats",
+        "operations": [
+            {
+                "method": "GET",
+                "summary": "Get aggregate inspection statistics",
+                "notes": "Returns a aggregate inspection statistics",
+                "type": "Stat",
+                "nickname": "getInspectionById",
+                "authorizations": {},
+                "parameters": [
+                    {
+                        "name": "type",
+                        "description": "type of stas to fetch",
+                        "required": true,
+                        "type": "string",
+                        "paramType": "query",
+                        "enum": [
+                        "violations",
+                        "inspections"
+                    ]
+                    }
+                ],
+                "responseMessages": [
+                    {
+                        "code": 404,
+                        "message": "Inspection not found"
+                    }
+                ]
+            }
+        ]
     }
 ], "models": {
     "Inspection": {
@@ -142,6 +201,21 @@
             "repeat": {
                 "type": "boolean",
                 "description": "Flag indicating if this is a repeat violation"
+            }
+        }
+    }, "Stat": {
+        "id": "Stat",
+        "required": ["texxt,count"],
+        "properties": {
+            "text": {
+                "type": "string",
+                "description": "label",
+                "required": true
+            },
+            "count": {
+                "type": "integer",
+                "description": "count",
+                "required": true
             }
         }
     }

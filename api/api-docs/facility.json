@@ -68,7 +68,8 @@
                         "required": false,
                         "type": "string",
                         "paramType": "query"
-                    },    {
+                    },
+                    {
                         "name": "sort",
                         "description": "sort order",
                         "required": false,
@@ -119,6 +120,36 @@
                     {
                         "code": 405,
                         "message": "Invalid input"
+                    }
+                ]
+            }
+        ]
+    },{
+        "path": "/facility/stats",
+        "operations": [
+            {
+                "method": "GET",
+                "summary": "Get aggregate facility statistics",
+                "notes": "Returns aggregate facility statistics",
+                "type": "Stat",
+                "nickname": "getInspectionById",
+                "authorizations": {},
+                "parameters": [
+                    {
+                        "name": "type",
+                        "description": "type of stas to fetch",
+                        "required": true,
+                        "type": "string",
+                        "paramType": "query",
+                        "enum": [
+                            "facilitytype"
+                        ]
+                    }
+                ],
+                "responseMessages": [
+                    {
+                        "code": 404,
+                        "message": "Inspection not found"
                     }
                 ]
             }
@@ -180,27 +211,27 @@
                     "type": "InspectionSummary"
                 }
             },
-            "loc":{
+            "loc": {
                 "type": "GeoPoint",
                 "description": "Lat/lon for facility",
-                "required":false
+                "required": false
             }
         }
     },
-    "GeoPoint":{
-      "id":"GeoPoint",
-        "required":["type"],
-        "properties":{
-            "type":{
-                "type":"string",
-                "description":"type of geo feature",
-                "required":true
+    "GeoPoint": {
+        "id": "GeoPoint",
+        "required": ["type"],
+        "properties": {
+            "type": {
+                "type": "string",
+                "description": "type of geo feature",
+                "required": true
             },
-            "coordinates":{
-                "type":"array",
-                "description":"point coordinates in lon/lat order",
-                "items":{
-                    "type":"double"
+            "coordinates": {
+                "type": "array",
+                "description": "point coordinates in lon/lat order",
+                "items": {
+                    "type": "double"
                 }
             }
         }
@@ -236,6 +267,22 @@
                 "type": "integer",
                 "format": "int64",
                 "description": "Number of non-critical violations for this inspection"
+            }
+        }
+    },
+    "Stat": {
+        "id": "Stat",
+        "required": ["texxt,count"],
+        "properties": {
+            "text": {
+                "type": "string",
+                "description": "label",
+                "required": true
+            },
+            "count": {
+                "type": "integer",
+                "description": "count",
+                "required": true
             }
         }
     }
