@@ -8,7 +8,7 @@ app.get('/healthinspections/facility', function (req, res) {
     var queryObj = {}
     //TODO: SANITIZE QUERY STRING
     if (req.query["name"] !== undefined) {
-        queryObj.name = new RegExp(req.query["name"]);
+        queryObj.name = new RegExp(req.query["name"], 'i');
     }
     if (req.query["city"] !== undefined) {
         queryObj.city = new RegExp(req.query["city"]);
