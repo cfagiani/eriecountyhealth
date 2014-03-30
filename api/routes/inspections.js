@@ -56,18 +56,30 @@ app.get('/healthinspections/inspection', function (req, res) {
 });
 
 app.get('/healthinspections/inspection/stats', function(req,res){
+    var queryObj = null;
+    if(req.query["type"]=="violations"){
+        queryObj = [{$unwind: "$violations"},{$group:{_id: {$concat:["$violations.text"," CODE:","$violations.code"]},count:{$sum:1}}}];
+    }else if (req.query["type"]=="inspections"){
+        queryObj ={$group:{_id: "$type",count:{$sum:1}}};
+    }
     db.collection('inspection', function (err, collection) {
-        collection.aggregate([{$unwind: "$violations"},{$group:{_id: {$concat:["$violations.text"," CODE:","$violations.code"]},count:{$sum:1}}}],function (err, items) {
+        collection.aggregate(queryObj,function (err, items) {
             items.forEach(function (item) {
-                var parts = item._id.split(" CODE:");
-                item._id = undefined;
-                item.text = parts[0];
-                item.code = parts[1];
+                if(req.query["type"]=="violations") {
+                    var parts = item._id.split(" CODE:");
+                    item._id = undefined;
+                    item.text = parts[0];
+                    item.code = parts[1];
+                }else{
+                    item.text = item._id;
+                    item._id = undefined;
+                }
             });
             //sort descending
             res.send(items.sort(function(a,b){return b.count - a.count}));
         });
     });
+
 });
 
 

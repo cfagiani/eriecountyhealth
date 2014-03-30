@@ -16,28 +16,48 @@ app.get('/healthinspections/facility', function (req, res) {
     if (req.query["type"] !== undefined) {
         queryObj.type = req.query["type"];
     }
-    if(req.query["sort"] !== undefined){
-        if(req.query["sort"] == "current-violations"){
-            options.sort = {'inspections.0.critical-violations' : -1, 'inspections.0.non-critical-violations':-1}
-        }else if (req.query["sort"] == "total-violations"){
+    if (req.query["sort"] !== undefined) {
+        if (req.query["sort"] == "current-violations") {
+            options.sort = {'inspections.0.critical-violations': -1, 'inspections.0.non-critical-violations': -1}
+        } else if (req.query["sort"] == "total-violations") {
             //TODO: build query using aggregation framework
         }
     }
-    if(req.query["blx"] !==undefined  && req.query["bly"] !==undefined && req.query["trx"] !==undefined  && req.query["try"] !==undefined){
+    if (req.query["blx"] !== undefined && req.query["bly"] !== undefined && req.query["trx"] !== undefined && req.query["try"] !== undefined) {
         options = {};
-        queryObj.loc = {$geoWithin: {$box :[[parseFloat(req.query["blx"]),parseFloat(req.query["bly"]) ],[parseFloat(req.query["trx"]),parseFloat(req.query["try"]) ]] }}
+        queryObj.loc = {$geoWithin: {$box: [
+            [parseFloat(req.query["blx"]), parseFloat(req.query["bly"]) ],
+            [parseFloat(req.query["trx"]), parseFloat(req.query["try"]) ]
+        ] }}
     }
 
 
-
-
     db.collection('facility', function (err, collection) {
-
         collection.find(queryObj, options).toArray(function (err, items) {
             items.forEach(function (item) {
                 item.inspectionsLink = '/healthinspections/facility/' + item._id + '/inspections';
             });
             res.send(items);
+        });
+    });
+
+});
+
+app.get('/healthinspections/facility/stats', function (req, res) {
+    var queryObj = null;
+    if (req.query["type"] == "facilitytype") {
+        queryObj = {$group: {_id: "$type", count: {$sum: 1}}};
+    }
+    db.collection('facility', function (err, collection) {
+        collection.aggregate(queryObj, function (err, items) {
+            items.forEach(function (item) {
+                item.text = item._id;
+                item._id = undefined;
+            });
+            //sort descending
+            res.send(items.sort(function (a, b) {
+                return b.count - a.count
+            }));
         });
     });
 
