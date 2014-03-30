@@ -8,8 +8,10 @@ app = express();
 var path = require('path');
 var application_root = __dirname;
 
-
-
+//TODO: real error handling This is just quick and dirty to prevent crashes
+process.on('uncaughtException', function (err) {
+    console.log(err);
+})
 
 
 app.configure(function () {
