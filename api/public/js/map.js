@@ -52,17 +52,19 @@ function initMap() {
         name: 'facility-search',
         displayKey: 'name',
         source: searchSuggester.ttAdapter()
-    });
-
-    $('#searchinput').bind('typeahead:selected', function (obj, data, name) {
-        if (data !== undefined && data.loc !== undefined) {
-            map.setCenter(new OpenLayers.LonLat(data.loc.coordinates[0], data.loc.coordinates[1]).transform(epsg4326, projectTo), 20);
-            selectedItem = data;
-            displayDetails(data);
-        }
-    });
+    }).on('typeahead:selected', searchSelected).on('typeahead:autocompleted', searchSelected);
 }
 
+
+function searchSelected($e, data){
+    if (data !== undefined && data.loc !== undefined) {
+        map.setCenter(new OpenLayers.LonLat(data.loc.coordinates[0], data.loc.coordinates[1]).transform(epsg4326, projectTo), 20);
+        selectedItem = data;
+    }
+    if(data !== undefined){
+        displayDetails(data);
+    }
+}
 
 
 /**
