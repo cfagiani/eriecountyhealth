@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>Erie County Food Facility Health Inspections</title>
-    <link href='/css/map.css' rel='stylesheet' type='text/css'/>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link href='/css/map.css' rel='stylesheet' type='text/css'/>
     <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
     <script src="/js/map.js"></script>
 </head>
@@ -33,8 +33,12 @@
         </div>
         <!--/.container-fluid -->
     </div>
-    <h4>Click a map marker to see inspection details. Green indicates no current violations, yellow indicates 1 or more non-critical violations and red denotes 1 or more critical violations. Clicking on an inspection header will display all violations for that inspection.</h4>
+    <h4>Click a map marker to see inspection details. Green indicates no current violations, yellow indicates 1 or more
+        non-critical violations and red denotes 1 or more critical violations. Clicking on an inspection header will
+        display all violations for that inspection.</h4>
+
     <div class="row">
+
         <div class="col-md-8">
             <div id="mapdiv"></div>
         </div>
@@ -50,6 +54,11 @@
         </div>
     </div>
     <div class="row">
+        <div class="input-group col-md-4">
+            <input type="text" class="form-control typeahead" id="searchinput" placeholder="Search by name">
+      </span>
+        </div>
+
         <div id="summarydiv">
             <h3>Summary for Items Currently Visible on Map</h3>
             <table>
@@ -75,6 +84,7 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
 <script>
     $(function () {
         initMap();

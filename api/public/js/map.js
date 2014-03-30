@@ -6,6 +6,8 @@ var projectTo = new OpenLayers.Projection("EPSG:900913"); //The map projection (
 
 var controls = null;
 
+var selectedItem = null;
+
 
 /**
  * initializes the map and the marker layer (vector layer). This function assumes a div called "mapdiv" exists on the page.
@@ -36,7 +38,31 @@ function initMap() {
     map.events.register('moveend', map, function (evt) {
         fetchPoints();
     });
+
+
+    var searchSuggester = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: '/healthinspections/facility?name=%QUERY'
+    });
+
+    searchSuggester.initialize();
+
+    $('#searchinput').typeahead(null, {
+        name: 'facility-search',
+        displayKey: 'name',
+        source: searchSuggester.ttAdapter()
+    });
+
+    $('#searchinput').bind('typeahead:selected', function (obj, data, name) {
+        if (data !== undefined && data.loc !== undefined) {
+            map.setCenter(new OpenLayers.LonLat(data.loc.coordinates[0], data.loc.coordinates[1]).transform(epsg4326, projectTo), 20);
+            selectedItem = data;
+            displayDetails(data);
+        }
+    });
 }
+
 
 
 /**
@@ -90,33 +116,33 @@ function displayDetails(item) {
         var content = '<div class="panel-group" id="accordion">';
         $.each(item.inspections, function (index, value) {
             var color = "#49F043";
-            if(value["critical-violations"]>0){
+            if (value["critical-violations"] > 0) {
                 color = "#f04d49";
-            }else if (value["non-critical-violations"]>0){
+            } else if (value["non-critical-violations"] > 0) {
                 color = "#EEF015";
             }
-            content+='<div class="panel panel-default"><div class="panel-heading" style="background-color:'+color+'"><h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse'+index+'">';
+            content += '<div class="panel panel-default"><div class="panel-heading" style="background-color:' + color + '"><h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse' + index + '">';
             var date = new Date(value.date);
-            content+=value.type+' ('+date.toDateString()+')</a></h4></div>';
-            content+=     ' <div id="collapse'+index+'" class="panel-collapse collapse"><div class="panel-body" id="'+value.id+'">';
+            content += value.type + ' (' + date.toDateString() + ')</a></h4></div>';
+            content += ' <div id="collapse' + index + '" class="panel-collapse collapse"><div class="panel-body" id="' + value.id + '">';
             //content inserted here after api call
-            content+='</div></div></div>';
+            content += '</div></div></div>';
         });
         content += '</div>';
         $('#inspectiondiv').append(content);
         $('#accordion').on('show.bs.collapse', function (evt) {
             var contentDiv = $(evt.target.children[0]);
 
-            $.get("/healthinspections/inspection/"+contentDiv[0].id, function(data){
-                if(data.violations !== undefined && data.violations.length>0){
+            $.get("/healthinspections/inspection/" + contentDiv[0].id, function (data) {
+                if (data.violations !== undefined && data.violations.length > 0) {
                     var inspContent = "";
-                    $.each(data.violations, function(index ,value){
-                        inspContent+="<p><b>"+value.code+"-"+value.text+"</b><br>";
-                        inspContent+=value.note+"</p>";
+                    $.each(data.violations, function (index, value) {
+                        inspContent += "<p><b>" + value.code + "-" + value.text + "</b><br>";
+                        inspContent += value.note + "</p>";
                     });
                     contentDiv.html(inspContent);
 
-                }else{
+                } else {
                     contentDiv.html("No Violations");
                 }
             });
@@ -193,9 +219,13 @@ function fetchPoints() {
                 );
 
                 markers.addFeatures(marker);
+                if(selectedItem != null && selectedItem._id == value._id){
+                    createPopup(marker);
+                }
             }
 
         });
+        selectedItem = null;
         updateSummaryContent(mostCritViolated, mostNonCritViolated, totalCritViolations, totalNonCritViolations, data.length);
     });
 }
