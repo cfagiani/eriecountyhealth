@@ -18,10 +18,10 @@ class DataExtractor {
 
     def extractData(url, page) {
         if (url.contains("InspectionDetails")) {
-            buildInspectionRecord(url, page)
+            Arrays.asList(buildInspectionRecord(url, page))
 
         } else if (url.contains("FacilityHistory")) {
-            buildFacilityRecord(url, page)
+            Arrays.asList(buildFacilityRecord(url, page))
         } else {
             return null
         }
