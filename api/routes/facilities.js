@@ -28,7 +28,16 @@ app.get('/healthinspections/facility', function (req, res) {
         queryObj.loc = {$geoWithin: {$box: [
             [parseFloat(req.query["blx"]), parseFloat(req.query["bly"]) ],
             [parseFloat(req.query["trx"]), parseFloat(req.query["try"]) ]
-        ] }}
+        ] }};
+    }
+    if (req.query["cx"] !== undefined && req.query["cy"] !== undefined){
+        options = {};
+        //ten km default radius
+        var rad = 10 ;
+        if(req.query['rad']!==undefined && req.query['rad']!==null){
+            rad = parseFloat(req.query['rad']);
+        }
+        queryObj.loc = {$near: {$geometry:{ type: 'Point', coordinates: [parseFloat(req.query["cx"]),parseFloat(req.query["cy"])]}, $maxDistance: 1000*parseFloat(req.query["rad"])}};
     }
 
 
